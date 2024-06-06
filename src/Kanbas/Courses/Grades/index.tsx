@@ -1,6 +1,5 @@
 import GradesControls from "./GradesControls";
 import { CiSearch } from "react-icons/ci";
-import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { CiFilter } from "react-icons/ci";
 export default function Grades() {
     return (
@@ -23,8 +22,7 @@ export default function Grades() {
             <div className="col">
               <div className="d-flex flex-row">
                 <button className="border-0"> <CiSearch/> </button>
-                <input id="wd-grades-student-names" className="form-control" type="text" placeholder="Search Students"></input>
-                <button className="border-0"> <IoIosArrowDropdownCircle/> </button>
+                <input id="wd-grades-student-names" className="form-select" type="text" placeholder="Search Students"></input>
               </div>
               <div>
 
@@ -33,8 +31,7 @@ export default function Grades() {
             <div className="col">
               <div className="d-flex flex-row">
                 <button className="border-0"> <CiSearch/> </button>
-                <input id="wd-grades-assignment-names" className="form-control" type="text" placeholder="Search Assignments"></input>
-                <button className="border-0"> <IoIosArrowDropdownCircle/> </button>
+                <input id="wd-grades-assignment-names" className="form-select" type="text" placeholder="Search Assignments"></input>
               </div>
             </div>
           </div>

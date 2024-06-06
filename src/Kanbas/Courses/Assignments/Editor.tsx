@@ -1,31 +1,30 @@
 export default function AssignmentEditor() {
     return (
-      <div id="wd-assignments-editor">
-        <label htmlFor="wd-name"><strong>Assignment Name</strong></label>
-        <br />
-        <input id="wd-name" className="form-control" value="A1" />
-        <br />
-        <label id="wd-description" className="form-control">
-          <br />
+      <div id="wd-assignments-editor" className="container">
+        <label htmlFor="wd-name" className="text-secondary"><strong>Assignment Name</strong></label>
+        <input id="wd-name" className="form-control mt-3" value="A1" />
+        <label id="wd-description" className="form-control mt-4">
+          <h6 className="pt-4">The assignment is <span className="text-danger">available online.</span></h6>
           
-          <h6>The assignment is <span className="text-danger">available online.</span></h6> <br />
-          Submit a link to the landing page of
-          your Web application running on Netlify.
+          <p className="pt-3">Submit a link to the landing page of
+          your Web application running on Netlify.</p>
+          
           The landing page should should include
-          the following: <br />
-          
-          &#8226; Your full name and section<br />
-          &#8226; Links to each of the lab assignments<br />
-          &#8226; Links to the Kanbas application <br />
-          &#8226; Links to all the relevant source code repositories <br /> <br />
+          the following:
+
+          <ul className="pt-2">
+            <li>Your full name and section</li>
+            <li>Links to each of the lab assignments</li>
+            <li>Links to the Kanbas application</li> 
+            <li>Links to all the relevant source code repositories</li>
+          </ul>
           The Kanbas application should include a
           link to navigate back to the landing page.
         </label>
-        <br />
 
-        <div className="container">
+        <div className="pt-4">
           <div className="row">
-            <div className="col-2 text-right">
+            <div className="col-2">
               <label htmlFor="wd-points"><h6>Points</h6></label>
             </div>
             <div className="col-10">
@@ -33,14 +32,12 @@ export default function AssignmentEditor() {
             </div>
           </div>
 
-          <br />
-
-          <div className="row">
+          <div className="row pt-4">
             <div className="col-2">
               <label htmlFor="wd-group"><h6>Assignment Group</h6></label>
             </div>
             <div className="col-10">
-              <select name="wd-group" className="form-control">
+              <select name="wd-group" className="form-select">
                 <option value="0">ASSIGNMENTS             </option>
                 <option value="1">PROJECTS                </option>
                 <option value="2">EXAMS                   </option>
@@ -48,86 +45,70 @@ export default function AssignmentEditor() {
               </select>
             </div>
           </div>
-        
-          <br />
 
-          <div className="row">
+          <div className="row pt-4">
             <div className="col-2">
               <label htmlFor="wd-display-grade-as"><h6>Display Grade as</h6></label>
             </div>
             <div className="col-10">
-              <select name="wd-display-grade-as" className="form-control">
+              <select name="wd-display-grade-as" className="form-select">
                 <option value="0">Percentage</option>
                 <option value="1">Raw Number</option>
               </select>
             </div>
           </div>
 
-          <br />
-
-          <div className="row">
+          <div className="row pt-4">
             <div className="col-2">
               <label htmlFor="wd-submission-type"><h6>Submission Type</h6></label>
             </div>
-            <div className="col-10 border border-rounded-1 pt-4">
-              <select name="wd-submission-type" className="form-control m-1">
+            <div className="col-10 border border-rounded-3 pt-4">
+              <select name="wd-submission-type" className="form-select m-1">
                 <option value="0">Online</option>
                 <option value="1">In Person</option>
                 <option value="2">Carrier Pigeon</option>
               </select>
         
-              <br />
-              
-              <b>Online Entry Options</b> <br /> <br />
-              <div className="checkbox">
-                <input type="checkbox" id="wd-text-entry"/> <label htmlFor="wd-text-entry">Text Entry</label>       
+              <label className="pt-4"><b>Online Entry Options</b></label>
+              <div className="checkbox pt-3">
+                <input type="checkbox" id="wd-text-entry"/> <label htmlFor="wd-text-entry" className="ps-2">Text Entry</label>       
               </div>
 
-              <br />
-
-              <div className="checkbox">
-                <input type="checkbox" id="wd-website-url"/> <label htmlFor="wd-website-url">Website URL</label>
+              <div className="checkbox pt-3">
+                <input type="checkbox" id="wd-website-url"/> <label htmlFor="wd-website-url" className="ps-2">Website URL</label>
               </div>
 
-              <br />
-
-              <div className="checkbox">
-                <input type="checkbox" id="wd-media-recordings"/> <label htmlFor="wd-media-recordings">Media Recordings</label>
+              <div className="checkbox pt-3">
+                <input type="checkbox" id="wd-media-recordings"/> <label htmlFor="wd-media-recordings" className="ps-2">Media Recordings</label>
               </div>
 
-              <br />
-
-              <div className="checkbox">
-                <input type="checkbox" id="wd-student-annotation"/> <label htmlFor="wd-student-annotation">Student Annotation</label>
+              <div className="checkbox pt-3">
+                <input type="checkbox" id="wd-student-annotation"/> <label htmlFor="wd-student-annotation" className="ps-2">Student Annotation</label>
               </div>
 
-              <br />
-
-              <div className="checkbox">
-                <input type="checkbox" id="wd-file-upload"/> <label htmlFor="wd-file-upload">File Uploads</label>
+              <div className="checkbox pt-3 pb-3">
+                <input type="checkbox" id="wd-file-upload"/> <label htmlFor="wd-file-upload" className="ps-2">File Uploads</label>
               </div>
             </div>
           </div>
-
-          <br />
           
-          <div className="row">
+          <div className="row pt-4">
             <div className="col-2">
               <label htmlFor="wd-submission-type"><h6>Assign</h6></label>
             </div>
             <div className="col-10 border border-rounded-1">
-              <br />
-              <strong>Assign to</strong><br />
-              <input id="wd-assign-to" type="text" placeholder="Everyone" className="form-control"></input>
+              <div className="pt-4">
+                <strong>Assign to</strong>
+                <input id="wd-assign-to" type="text" placeholder="Everyone" className="form-control"></input>
+              </div>
               
-              <br />
-              <label htmlFor="wd-due-date"><strong>Due</strong></label> 
-              <input id="wd-due-date" type="date" className="form-control"/>
+              <div className="pt-4">
+                <label htmlFor="wd-due-date"><strong>Due</strong></label> 
+                <input id="wd-due-date" type="date" className="form-control"/>
+              </div>
 
-              <br />
-
-              <div className="container">
-                <div className="row">
+              <div className="container pt-4">
+                <div className="row justify-content-between">
                   <div className="col">
                     <label htmlFor="wd-available-from"><strong>Available from</strong></label>
                   </div>
@@ -135,7 +116,7 @@ export default function AssignmentEditor() {
                     <label htmlFor="wd-available-until"><strong>Until</strong></label>
                   </div>
                 </div>
-                <div className="row">
+                <div className="row pb-4">
                   <div className="col">
                     <input id="wd-available-from" className="form-control" type="date"/>
                   </div>
@@ -144,7 +125,7 @@ export default function AssignmentEditor() {
                   </div>
                 </div>
               </div>
-              <br />
+
             </div>
           </div>
         </div>
@@ -160,6 +141,9 @@ export default function AssignmentEditor() {
           </button>
 
         </div>
-        <br />
+
+        <div className="pt-5 pb-5">
+
+        </div>
       </div>
 );}
