@@ -1,7 +1,16 @@
 import GradesControls from "./GradesControls";
 import { CiSearch } from "react-icons/ci";
 import { CiFilter } from "react-icons/ci";
+import * as db from "../../Database";
+import { useParams } from "react-router";
+import "./styles.css"
+
 export default function Grades() {
+    const { cid } = useParams();
+    const enrollments = db.enrollments.filter((enrollment => enrollment.course === cid));
+    const assignments = db.assignments.filter((assignment => assignment.course === cid));
+    const users = db.users.filter((user => enrollments.find(enrollment => enrollment.user === user._id)));
+    const grades = db.grades.filter((grade => assignments.find(assignment => assignment._id === grade.assignment)));
     return (
       <div id="wd-grades">
         <div className="container pt-2">
@@ -46,24 +55,32 @@ export default function Grades() {
               <thead className="table-secondary">
                 <tr className="bg-primary">
                   <th>Student Name</th>
-                  <th className="text-center"><div>A1 SETUP</div><div>Out of 100</div></th>
-                  <th className="text-center">A2 HTML Out of 100</th>
-                  <th className="text-center">A3 CSS Out of 100</th>
-                  <th className="text-center">A4 Bootstrap Out of 100</th>
+                  {assignments.map((assignment) => (
+                    <th className="text-center">{assignment.title}</th>)
+                  )}
                 </tr>
               </thead>
               <tbody>
-                <tr><td><span className="text-danger">Jane Adams</span></td><td className="text-center">100%</td><td className="text-center">96.67%</td><td className="text-center">92.18%</td><td className="text-center">66.22%</td></tr>
-                <tr><td><span className="text-danger">Christina Allen</span></td><td className="text-center">100%</td>
-                    <td className="text-center"><input type="number" value="75"></input></td>
-                    <td className="text-center">100%</td><td className="text-center">100%</td></tr>
-                <tr><td><span className="text-danger">Samreen Ansari</span></td><td className="text-center">100%</td><td className="text-center">96.67%</td><td className="text-center">92.18%</td><td className="text-center">66.22%</td></tr>
-                <tr><td><span className="text-danger">Han Bao</span></td><td className="text-center">100%</td><td className="text-center">96.67%</td><td className="text-center">88.03</td><td className="text-center">98.99%</td></tr>
-                <tr><td><span className="text-danger">Mahi Sai Srinivas Bobbili</span></td><td className="text-center">100%</td><td className="text-center">96.67%</td><td className="text-center">98.37%</td><td className="text-center">100%</td></tr>
-                <tr><td><span className="text-danger">Siran Cao</span></td><td className="text-center">100%</td><td className="text-center">100%</td><td className="text-center">100%</td><td className="text-center">100%</td></tr>
+
+                {users.map((user) => (
+                  <tr className="table-row">
+                    <td>
+                      <span className="text-danger">{user.firstName} {user.lastName}</span>
+                    </td>
+
+                    {grades
+                        .filter(grade => (
+                          grade.student === user._id 
+                        ))
+                        .map((grade) => (
+                          <td className="text-center">{grade.grade}%</td>
+                    ))}
+
+                  </tr>
+                ))}
               </tbody>
             </table>
-            </div>
+          </div>
 
         </div>
       </div>

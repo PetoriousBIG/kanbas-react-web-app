@@ -1,26 +1,17 @@
+import { useParams, useNavigate } from "react-router-dom";
+import * as db from "../../Database";
+
 export default function AssignmentEditor() {
+    const { aid } = useParams();
+    const assignment = db.assignments.filter((assignment: any) => assignment._id === aid)[0]
+    const assignmentGroups = ["ASSIGNMENTS", "PROJECTS", "QUIZZES", "EXAMS"]
+    const nav = useNavigate()
+
     return (
       <div id="wd-assignments-editor" className="container">
         <label htmlFor="wd-name" className="text-secondary"><strong>Assignment Name</strong></label>
-        <input id="wd-name" className="form-control mt-3" value="A1" />
-        <label id="wd-description" className="form-control mt-4">
-          <h6 className="pt-4">The assignment is <span className="text-danger">available online.</span></h6>
-          
-          <p className="pt-3">Submit a link to the landing page of
-          your Web application running on Netlify.</p>
-          
-          The landing page should should include
-          the following:
-
-          <ul className="pt-2">
-            <li>Your full name and section</li>
-            <li>Links to each of the lab assignments</li>
-            <li>Links to the Kanbas application</li> 
-            <li>Links to all the relevant source code repositories</li>
-          </ul>
-          The Kanbas application should include a
-          link to navigate back to the landing page.
-        </label>
+        <input id="wd-name" className="form-control mt-3" defaultValue={assignment.title} />
+        <textarea id="wd-description" className="form-control mt-4" defaultValue={assignment.description}/>
 
         <div className="pt-4">
           <div className="row">
@@ -28,7 +19,7 @@ export default function AssignmentEditor() {
               <label htmlFor="wd-points"><h6>Points</h6></label>
             </div>
             <div className="col-10">
-              <input id="wd-points" className="form-control" value={100} />
+              <input id="wd-points" className="form-control" defaultValue={assignment.score} />
             </div>
           </div>
 
@@ -37,11 +28,11 @@ export default function AssignmentEditor() {
               <label htmlFor="wd-group"><h6>Assignment Group</h6></label>
             </div>
             <div className="col-10">
-              <select name="wd-group" className="form-select">
-                <option value="0">ASSIGNMENTS             </option>
-                <option value="1">PROJECTS                </option>
-                <option value="2">EXAMS                   </option>
-                <option value="3">QUIZZES                 </option>
+              <select name="wd-group" className="form-select" defaultValue={assignment.group}>
+                <option value="0">{assignmentGroups[0]}</option>
+                <option value="1">{assignmentGroups[1]}</option>
+                <option value="2">{assignmentGroups[2]}</option>
+                <option value="3">{assignmentGroups[3]}</option>
               </select>
             </div>
           </div>
@@ -104,7 +95,7 @@ export default function AssignmentEditor() {
               
               <div className="pt-4">
                 <label htmlFor="wd-due-date"><strong>Due</strong></label> 
-                <input id="wd-due-date" type="date" className="form-control"/>
+                <input id="wd-due-date" type="date" className="form-control" defaultValue={assignment.due_date}/>
               </div>
 
               <div className="container pt-4">
@@ -118,10 +109,10 @@ export default function AssignmentEditor() {
                 </div>
                 <div className="row pb-4">
                   <div className="col">
-                    <input id="wd-available-from" className="form-control" type="date"/>
+                    <input id="wd-available-from" className="form-control" defaultValue={assignment.available_date} type="date"/>
                   </div>
                   <div className="col">
-                    <input id="wd-available-until" className="form-control" type="date"/>
+                    <input id="wd-available-until" className="form-control" defaultValue={assignment.due_date} type="date"/>
                   </div>
                 </div>
               </div>
@@ -131,12 +122,17 @@ export default function AssignmentEditor() {
         </div>
 
         <hr />
+        {/*
+          Solution for going back in webpage taken from:
+          https://stackoverflow.com/questions/30915173/react-router-go-back-a-page-how-do-you-configure-history  
+
+          See useNavigate solution.
+        */}
         <div id="wd-editor-save" className="container pb-5">
-          <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end">
+          <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" onClick={() => nav(-1)}>
             Save
           </button>        
-          <button id="wd-editor-cancel" className="btn btn-lg me-1 btn-secondary float-end"
-            type="button">
+          <button id="wd-editor-cancel" className="btn btn-lg me-1 btn-secondary float-end" onClick={() => nav(-1)} type="button">
             Cancel
           </button>
 
