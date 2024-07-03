@@ -1,17 +1,35 @@
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import * as db from "../../Database";
+import { useSelector, useDispatch } from "react-redux";
+import { addAssignment, updateAssignment}
+  from "./reducer";
 
 export default function AssignmentEditor() {
-    const { aid } = useParams();
-    const assignment = db.assignments.filter((assignment: any) => assignment._id === aid)[0]
+    const { cid, aid } = useParams();
+    const assignment = useSelector((state: any) => state.assignmentsReducer.assignments.find((assignment: any) => assignment._id === aid))
+    const exists = assignment !== undefined
     const assignmentGroups = ["ASSIGNMENTS", "PROJECTS", "QUIZZES", "EXAMS"]
+    const dispatch = useDispatch()
     const nav = useNavigate()
+
+    const [assignmentTitle, setAssignmentTitle] = useState(exists ? assignment.title : "New Assignment");
+    const [assignmentDescription, setAssignmentDescription] = useState(exists ? assignment.description : "New Description");
+    const [assignmentAvailableDate, setAssignmentAvailableDate] = useState(exists ? assignment.available_date : new Date().toDateString());
+    const [assignmentAvailableTime, setAssignmentAvailableTime] = useState(exists ? assignment.available_time : "12:00am");
+    const [assignmentDueDate, setAssignmentDueDate] = useState(exists ? assignment.due_date : new Date().toDateString());
+    const [assignmentDueTime, setAssignmentDueTime] = useState(exists ? assignment.due_time : "11:59pm");
+    const [assignmentScore, setAssignmentScore] = useState(exists ? assignment.score : 100);
+    const [assignmentGroup, setAssignmentGroup] = useState(exists ? assignment.group : assignmentGroups[0])
+    const [assignmentUntilDate, setAssignmentUntilDate] = useState(exists ? assignment.until_date : new Date().toDateString())
+    const [assignmentUntilTime, setAssignmentUntilTime] = useState(exists ? assignment.until_time : "11:59pm")
 
     return (
       <div id="wd-assignments-editor" className="container">
         <label htmlFor="wd-name" className="text-secondary"><strong>Assignment Name</strong></label>
-        <input id="wd-name" className="form-control mt-3" defaultValue={assignment.title} />
-        <textarea id="wd-description" className="form-control mt-4" defaultValue={assignment.description}/>
+        <input id="wd-name" className="form-control mt-3" value={assignmentTitle}
+         onChange={(e) => setAssignmentTitle(e.target.value)}/>
+        <textarea id="wd-description" className="form-control mt-4" value={assignmentDescription}
+          onChange={(e) => setAssignmentDescription(e.target.value)}/>
 
         <div className="pt-4">
           <div className="row">
@@ -19,7 +37,8 @@ export default function AssignmentEditor() {
               <label htmlFor="wd-points"><h6>Points</h6></label>
             </div>
             <div className="col-10">
-              <input id="wd-points" className="form-control" defaultValue={assignment.score} />
+              <input id="wd-points" className="form-control" value={assignmentScore}
+                onChange={(e) => setAssignmentScore(e.target.value)}/>
             </div>
           </div>
 
@@ -28,7 +47,8 @@ export default function AssignmentEditor() {
               <label htmlFor="wd-group"><h6>Assignment Group</h6></label>
             </div>
             <div className="col-10">
-              <select name="wd-group" className="form-select" defaultValue={assignment.group}>
+              <select name="wd-group" className="form-select" value={assignmentGroup}
+                onChange={(e) => setAssignmentGroup(e.target.value)}>
                 <option value="0">{assignmentGroups[0]}</option>
                 <option value="1">{assignmentGroups[1]}</option>
                 <option value="2">{assignmentGroups[2]}</option>
@@ -95,7 +115,8 @@ export default function AssignmentEditor() {
               
               <div className="pt-4">
                 <label htmlFor="wd-due-date"><strong>Due</strong></label> 
-                <input id="wd-due-date" type="date" className="form-control" defaultValue={assignment.due_date}/>
+                <input id="wd-due-date" type="date" className="form-control" value={assignmentDueDate}
+                  onChange={(e) => setAssignmentDueDate(e.target.value)}/>
               </div>
 
               <div className="container pt-4">
@@ -109,18 +130,18 @@ export default function AssignmentEditor() {
                 </div>
                 <div className="row pb-4">
                   <div className="col">
-                    <input id="wd-available-from" className="form-control" defaultValue={assignment.available_date} type="date"/>
+                    <input id="wd-available-from" className="form-control" value={assignmentAvailableDate} type="date"
+                      onChange={(e) => setAssignmentAvailableDate(e.target.value)}/>
                   </div>
                   <div className="col">
-                    <input id="wd-available-until" className="form-control" defaultValue={assignment.due_date} type="date"/>
+                    <input id="wd-available-until" className="form-control" value={assignmentUntilDate} type="date"
+                      onChange={(e) => setAssignmentUntilDate(e.target.value)}/>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
-
         <hr />
         {/*
           Solution for going back in webpage taken from:
@@ -129,7 +150,36 @@ export default function AssignmentEditor() {
           See useNavigate solution.
         */}
         <div id="wd-editor-save" className="container pb-5">
-          <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" onClick={() => nav(-1)}>
+          <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" 
+            onClick={(e) => {
+              if (exists) {
+                  dispatch(updateAssignment({_id: aid,
+                                             title: assignmentTitle, 
+                                             course: cid,
+                                             available_date: assignmentAvailableDate,
+                                             available_time: assignmentAvailableTime,
+                                             until_date: assignmentUntilDate,
+                                             until_time: assignmentUntilTime,
+                                             due_date: assignmentDueDate,
+                                             due_time: assignmentDueTime,
+                                             score: assignmentScore,
+                                             description: assignmentDescription,
+                                             group: assignmentGroup}))
+              } else {
+                  dispatch(addAssignment({title: assignmentTitle, 
+                                          course: cid,
+                                          available_date: assignmentAvailableDate,
+                                          available_time: assignmentAvailableTime,
+                                          until_date: assignmentUntilDate,
+                                          until_time: assignmentUntilTime,
+                                          due_date: assignmentDueDate,
+                                          due_time: assignmentDueTime,
+                                          score: assignmentScore,
+                                          description: assignmentDescription,
+                                          group: assignmentGroup}))
+              }
+              nav(-1);}
+              }>
             Save
           </button>        
           <button id="wd-editor-cancel" className="btn btn-lg me-1 btn-secondary float-end" onClick={() => nav(-1)} type="button">
