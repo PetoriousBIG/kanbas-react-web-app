@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as client from "./client";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addAssignment, updateAssignment}
@@ -6,11 +7,24 @@ import { addAssignment, updateAssignment}
 
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
+    const dispatch = useDispatch();
+
+    const createAssignment = async (assignment: any) => {
+        const newAssignment = await client.createAssignment(cid as string, assignment);
+        dispatch(addAssignment(assignment));
+    }
+
+    const saveAssignment = async (assignment: any) => {
+        const status = await client.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    }
+
     const assignment = useSelector((state: any) => state.assignmentsReducer.assignments.find((assignment: any) => assignment._id === aid))
+    
     const exists = assignment !== undefined
-    const assignmentGroups = ["ASSIGNMENTS", "PROJECTS", "QUIZZES", "EXAMS"]
-    const dispatch = useDispatch()
+
     const nav = useNavigate()
+    const assignmentGroups = ["ASSIGNMENTS", "PROJECTS", "QUIZZES", "EXAMS"]
 
     const [assignmentTitle, setAssignmentTitle] = useState(exists ? assignment.title : "New Assignment");
     const [assignmentDescription, setAssignmentDescription] = useState(exists ? assignment.description : "New Description");
@@ -153,30 +167,30 @@ export default function AssignmentEditor() {
           <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end" 
             onClick={(e) => {
               if (exists) {
-                  dispatch(updateAssignment({_id: aid,
-                                             title: assignmentTitle, 
-                                             course: cid,
-                                             available_date: assignmentAvailableDate,
-                                             available_time: assignmentAvailableTime,
-                                             until_date: assignmentUntilDate,
-                                             until_time: assignmentUntilTime,
-                                             due_date: assignmentDueDate,
-                                             due_time: assignmentDueTime,
-                                             score: assignmentScore,
-                                             description: assignmentDescription,
-                                             group: assignmentGroup}))
+                  saveAssignment({_id: aid,
+                                  title: assignmentTitle, 
+                                  course: cid,
+                                  available_date: assignmentAvailableDate,
+                                  available_time: assignmentAvailableTime,
+                                  until_date: assignmentUntilDate,
+                                  until_time: assignmentUntilTime,
+                                  due_date: assignmentDueDate,
+                                  due_time: assignmentDueTime,
+                                  score: assignmentScore,
+                                  description: assignmentDescription,
+                                  group: assignmentGroup})
               } else {
-                  dispatch(addAssignment({title: assignmentTitle, 
-                                          course: cid,
-                                          available_date: assignmentAvailableDate,
-                                          available_time: assignmentAvailableTime,
-                                          until_date: assignmentUntilDate,
-                                          until_time: assignmentUntilTime,
-                                          due_date: assignmentDueDate,
-                                          due_time: assignmentDueTime,
-                                          score: assignmentScore,
-                                          description: assignmentDescription,
-                                          group: assignmentGroup}))
+                  createAssignment({title: assignmentTitle, 
+                                    course: cid,
+                                    available_date: assignmentAvailableDate,
+                                    available_time: assignmentAvailableTime,
+                                    until_date: assignmentUntilDate,
+                                    until_time: assignmentUntilTime,
+                                    due_date: assignmentDueDate,
+                                    due_time: assignmentDueTime,
+                                    score: assignmentScore,
+                                    description: assignmentDescription,
+                                    group: assignmentGroup})
               }
               nav(-1);}
               }>
