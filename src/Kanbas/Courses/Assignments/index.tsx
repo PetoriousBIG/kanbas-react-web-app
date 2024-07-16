@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import * as client from "./client";
 import AssignmentsControls from "./AssignmentsControls";
 import AssignmentControlButtons from "./AssignmentControlButtons";
 import RowControlButtons from "./RowControlButtons"
@@ -8,14 +9,34 @@ import { GiNotebook } from "react-icons/gi";
 import "./styles.css"
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addAssignment, editAssignment, updateAssignment, deleteAssignment }
+import { updateAssignment, deleteAssignment, setAssignments }
   from "./reducer";
-import { updateModule } from "../Modules/reducer";
 
 export default function Assignments() {
     const { cid } = useParams();
-    const { assignments } = useSelector((state: any) => state.assignmentsReducer)
     const dispatch = useDispatch()
+
+    const fetchAssignments = async () => {
+        const assignments = await client.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignments(assignments));
+    }
+    useEffect(() => {
+        fetchAssignments();
+    }, []);
+
+    const removeAssignment = async (assignmentId: string) => {
+        await client.deleteAssignment(assignmentId);
+        dispatch(deleteAssignment(assignmentId));
+    }
+
+    const saveAssignment = async (assignment: any) => {
+        const status = await client.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    }
+
+    const { assignments } = useSelector((state: any) => state.assignmentsReducer)
+    console.log(assignments);
+
     return (
       <div id="wd-assignments">
         <div className="pb-5">
@@ -32,7 +53,6 @@ export default function Assignments() {
               </div>
               <ul className="wd-lessons list-group rounded-0">
                 {assignments
-                  .filter((assignment: any) => assignment.course === cid)
                   .map((assignment: any) => (
                   <li className="wd-lesson list-group-item p-3 ps-1 border-green d-flex flex-row justify-content-end align-items-center"
                       key={assignment._id}>
@@ -48,10 +68,10 @@ export default function Assignments() {
                               {!assignment.editing && assignment.title}
                               { assignment.editing && (
                                 <input className="form-control w-50 d-inline-block"
-                                  onChange={(e) => dispatch(updateAssignment({ ...assignment, title: e.target.value }))}
+                                  onChange={(e) => saveAssignment({ ...assignment, title: e.target.value })}
                                   onKeyDown={(e) => {
                                     if (e.key === "Enter") {
-                                      dispatch(updateModule({ ...assignment, editing: false}));
+                                      saveAssignment({ ...assignment, editing: false});
                                     }
                                   }}
                                   value={assignment.title} />
@@ -66,8 +86,8 @@ export default function Assignments() {
                     </div>
                     <div>
                       <RowControlButtons assignmentId={assignment._id}
-                        deleteAssignment={(assignmentId) => {dispatch(deleteAssignment(assignmentId));
-                        }}/>
+                        deleteAssignment={(assignmentId) => {removeAssignment(assignmentId);
+                      }}/>
                     </div>
                   </li>))}
               </ul>
