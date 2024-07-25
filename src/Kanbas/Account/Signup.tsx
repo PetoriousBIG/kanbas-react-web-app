@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
 import * as client from "./client";
+
 export default function Signup() {
   const [user, setUser] = useState<any>({});
   const [error, setError] = useState("");

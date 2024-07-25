@@ -12,6 +12,7 @@ export default function Profile() {
             const account = await client.profile()
             setProfile(account);
         } catch (err: any) {
+            console.log(`Profile not found: ${err}` );
             navigate("/Kanbas/Account/Signin");
         };
     };
