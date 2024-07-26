@@ -10,6 +10,7 @@ export default function Profile() {
     const fetchProfile = async () => {
         try {
             const account = await client.profile()
+            console.log("Did we hit line 13 in profile?")
             setProfile(account);
         } catch (err: any) {
             console.log(`Profile not found: ${err}` );

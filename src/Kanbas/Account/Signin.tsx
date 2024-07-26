@@ -12,6 +12,7 @@ export default function Signin() {
   const signin = async () => {
       try {
           const currentUser = await client.signin(credentials);
+          console.log("Did we hit line 15 in signin?")
           dispatch(setCurrentUser(currentUser));
           navigate("/Kanbas/Account/Profile");
       } catch (err: any) {
