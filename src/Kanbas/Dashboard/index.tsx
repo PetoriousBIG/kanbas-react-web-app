@@ -12,6 +12,10 @@ export default function Dashboard(
           <button className="btn btn-primary float-end"
                   id="wd-add-new-course-click"
                   onClick={addNewCourse} > Add </button>
+          <button id="wd-update-course-click"
+                  onClick={updateCourse}
+                  className="btn btn-warning me-2 float-end" >
+                  Update</button>
       </h5><br />
       <input value={course.name} className='form-control mb-2' 
         onChange={(e) => setCourse({...course, name: e.target.value }) } />
@@ -43,11 +47,14 @@ export default function Dashboard(
                       className="btn btn-danger float-end"
                       id="wd-delete-course-click">Delete</button>
 
-                    <button id="wd-update-course-click"
-                      onClick={updateCourse}
-                      className="btn btn-warning me-2 float-end" >
-                      Update</button>
-
+                    <button id="wd-edit-course-click"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              setCourse(course);
+                            }}
+                            className="btn btn-warning me-2 float-end" >
+                      Edit
+                    </button>
                   </div>
                 </div>
               </Link>
